@@ -1,7 +1,8 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "circuitlord.reactivemusic.mixin",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "${mixin_compat}",
   "mixins": [
   ],
   "injectors": {

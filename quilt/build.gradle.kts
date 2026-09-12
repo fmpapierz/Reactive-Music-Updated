@@ -51,6 +51,7 @@ tasks.named<ProcessResources>("processResources") {
         "version" to project.version,
         "description" to project.property("mod_description"),
         "authors" to project.property("mod_authors"),
+        "original_author" to project.property("mod_original_author"),
         "license" to project.property("mod_license"),
         "homepage" to project.property("mod_homepage"),
         "issues" to project.property("mod_issues"),
@@ -59,9 +60,13 @@ tasks.named<ProcessResources>("processResources") {
         "minecraft" to minecraftVersion,
         "quilt_loader" to quiltLoaderVersion,
         "java" to project.property("java_version"),
+        "mixin_compat" to project.property("mixin_compat")
     )
     inputs.properties(properties)
     filesMatching("quilt.mod.json") {
+        expand(properties)
+    }
+    filesMatching("reactivemusic-common.mixins.json") {
         expand(properties)
     }
 }

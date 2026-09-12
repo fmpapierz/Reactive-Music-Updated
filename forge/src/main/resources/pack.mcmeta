@@ -1,6 +1,13 @@
 {
   "pack": {
     "description": "${name}",
-    "pack_format": ${pack_format}
+    "min_format": [
+      ${resource_format_major},
+      ${resource_format_minor}
+    ],
+    "max_format": [
+      ${resource_format_major},
+      ${resource_format_minor}
+    ]
   }
 }

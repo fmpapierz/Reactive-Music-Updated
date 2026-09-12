@@ -8,7 +8,8 @@
 			"name": "${name}",
 			"description": "${description}",
 			"contributors": {
-				"${authors}": "Author"
+				"${authors}": "Author",
+				"${original_author}": "Original Author"
 			},
 			"contact": {
 				"homepage": "${homepage}",

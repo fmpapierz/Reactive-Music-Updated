@@ -41,19 +41,20 @@ tasks.named<ProcessResources>("processResources") {
         "version" to project.version,
         "description" to project.property("mod_description"),
         "authors" to project.property("mod_authors"),
+        "credits" to project.property("mod_credits"),
         "license" to project.property("mod_license"),
         "homepage" to project.property("mod_homepage"),
         "issues" to project.property("mod_issues"),
         "minecraft_range" to project.property("minecraft_version_range"),
-        "pack_format" to project.property("resource_pack_format"),
         "javafml" to project.property("javafml_neoforge_range"),
         "loader" to project.property("neoforge_version_range"),
+        "mixin_compat" to project.property("mixin_compat")
     )
     inputs.properties(properties)
     filesMatching("META-INF/neoforge.mods.toml") {
         expand(properties)
     }
-    filesMatching("pack.mcmeta") {
+    filesMatching("reactivemusic-common.mixins.json") {
         expand(properties)
     }
 }

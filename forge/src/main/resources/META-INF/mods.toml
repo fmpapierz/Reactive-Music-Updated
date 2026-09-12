@@ -9,6 +9,7 @@ version = "${version}"
 displayName = "${name}"
 description = "${description}"
 authors = "${authors}"
+credits = "${credits}"
 logoFile = "icon.png"
 displayURL = "${homepage}"
 

@@ -82,7 +82,10 @@ list on NeoForge and Forge.
 
 ## Credits
 
-Reactive Music was created by **CircuitLord**. Original project:
-<https://github.com/CircuitLord/ReactiveMusic>
+Reactive Music was originally created by **CircuitLord** — original project:
+<https://github.com/CircuitLord/ReactiveMusic>. All of the mod's design, its songpack
+format and the bundled soundtrack are their work.
+
+This Minecraft 26.2 multiloader update is maintained by **hooneybAdgers**.
 
 Licensed under the GNU General Public License v3.0 — see [LICENSE](LICENSE).

@@ -38,6 +38,11 @@ dependencies {
     // Optional integration: the Mod Menu config-screen entrypoint is only wired up
     // when Mod Menu is actually installed.
     compileOnly("com.terraformersmc:modmenu:$modmenuVersion")
+
+    // Present in the dev client so the config screen can be exercised through Mod Menu.
+    // Loom 1.17 dropped the remapping configurations, so a plain runtime dependency is
+    // enough: Fabric Loader discovers classpath jars that carry a fabric.mod.json.
+    runtimeOnly("com.terraformersmc:modmenu:$modmenuVersion")
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -47,6 +52,7 @@ tasks.named<ProcessResources>("processResources") {
         "version" to project.version,
         "description" to project.property("mod_description"),
         "authors" to project.property("mod_authors"),
+        "original_author" to project.property("mod_original_author"),
         "license" to project.property("mod_license"),
         "homepage" to project.property("mod_homepage"),
         "issues" to project.property("mod_issues"),
@@ -54,9 +60,13 @@ tasks.named<ProcessResources>("processResources") {
         "minecraft" to minecraftVersion,
         "fabric_loader" to fabricLoaderVersion,
         "java" to project.property("java_version"),
+        "mixin_compat" to project.property("mixin_compat")
     )
     inputs.properties(properties)
     filesMatching("fabric.mod.json") {
+        expand(properties)
+    }
+    filesMatching("reactivemusic-common.mixins.json") {
         expand(properties)
     }
 }
