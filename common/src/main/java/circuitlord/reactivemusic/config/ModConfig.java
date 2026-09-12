@@ -72,6 +72,8 @@ public class ModConfig {
     private static class VanillaConfigScreen extends Screen {
         private static final int ROW_HEIGHT = 44;
         private static final int SONGPACK_START_Y = 164;
+        /** Lines the details panel moves per wheel notch. */
+        private static final int SCROLL_LINES = 3;
         private static final int BUTTON_HEIGHT = 20;
         private static final int LABEL_COLOR = 0xFFFFFFFF;
         private static final int MUTED_COLOR = 0xFFA0A0A0;
@@ -246,7 +248,10 @@ public class ModConfig {
             }
 
             if (lines.size() > visibleLines) {
-                String scroll = "Scroll " + (detailsScroll + 1) + " / " + (maxDetailsScroll(lines, visibleLines) + 1);
+                // Report the visible line range rather than the scroll offset: the wheel
+                // moves SCROLL_LINES at a time, so an offset counter appears to skip
+                // numbers (1, 4, 7, ...) even though no text is ever skipped.
+                String scroll = "Lines " + (detailsScroll + 1) + "-" + end + " / " + lines.size();
                 context.text(this.font, Component.literal(scroll), right - 8 - this.font.width(scroll), bottom - 12, MUTED_COLOR);
             }
         }
@@ -266,7 +271,7 @@ public class ModConfig {
 
             int visibleLines = Math.max(1, (detailsBottom() - (SONGPACK_START_Y - 4) - 16) / 10);
             List<FormattedCharSequence> lines = detailsLines(detailsRight() - detailsLeft() - 16);
-            detailsScroll = Math.max(0, Math.min(detailsScroll - (int) Math.signum(amount) * 3, maxDetailsScroll(lines, visibleLines)));
+            detailsScroll = Math.max(0, Math.min(detailsScroll - (int) Math.signum(amount) * SCROLL_LINES, maxDetailsScroll(lines, visibleLines)));
             return true;
         }
 
