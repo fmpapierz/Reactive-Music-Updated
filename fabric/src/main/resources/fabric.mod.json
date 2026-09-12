@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}",
+	"version": "${version}",
+	"name": "${name}",
+	"description": "${description}",
+	"authors": [
+		"${authors}"
+	],
+	"contact": {
+		"homepage": "${homepage}",
+		"issues": "${issues}",
+		"sources": "${sources}"
+	},
+	"license": "${license}",
+	"icon": "assets/reactivemusic/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"circuitlord.reactivemusic.fabric.ReactiveMusicFabric"
+		],
+		"modmenu": [
+			"circuitlord.reactivemusic.fabric.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"reactivemusic-common.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${fabric_loader}",
+		"minecraft": "~${minecraft}",
+		"java": ">=${java}",
+		"fabric-api": "*"
+	}
+}

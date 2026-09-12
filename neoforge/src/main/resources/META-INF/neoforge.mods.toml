@@ -1,0 +1,30 @@
+modLoader = "javafml"
+loaderVersion = "${javafml}"
+license = "${license}"
+issueTrackerURL = "${issues}"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${name}"
+description = "${description}"
+authors = "${authors}"
+logoFile = "icon.png"
+displayURL = "${homepage}"
+
+[[mixins]]
+config = "reactivemusic-common.mixins.json"
+
+[[dependencies.${id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "${loader}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_range}"
+ordering = "NONE"
+side = "CLIENT"

@@ -1,0 +1,48 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "${group}",
+		"id": "${id}",
+		"version": "${version}",
+		"metadata": {
+			"name": "${name}",
+			"description": "${description}",
+			"contributors": {
+				"${authors}": "Author"
+			},
+			"contact": {
+				"homepage": "${homepage}",
+				"issues": "${issues}",
+				"sources": "${sources}"
+			},
+			"license": "${license}",
+			"icon": "assets/reactivemusic/icon.png"
+		},
+		"entrypoints": {
+			"client": [
+				"circuitlord.reactivemusic.quilt.ReactiveMusicQuilt"
+			],
+			"modmenu": [
+				"circuitlord.reactivemusic.quilt.ModMenuIntegration"
+			]
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=${quilt_loader}"
+			},
+			{
+				"id": "minecraft",
+				"versions": "${minecraft}"
+			},
+			{
+				"id": "fabric-api",
+				"versions": "*"
+			}
+		]
+	},
+	"mixin": "reactivemusic-common.mixins.json",
+	"minecraft": {
+		"environment": "client"
+	}
+}
