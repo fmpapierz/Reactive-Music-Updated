@@ -311,10 +311,9 @@ public class ModConfig {
                 addBlank(lines);
             }
 
-            // The description is the panel's main body text and follows the name and
-            // status directly, so it needs no heading of its own.
             String description = songpack.config != null && songpack.config.description != null ? songpack.config.description.trim() : "";
             if (!description.isEmpty()) {
+                addWrapped(lines, "Description:", width);
                 addWrapped(lines, description, width);
                 addBlank(lines);
             }
