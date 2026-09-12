@@ -75,6 +75,10 @@ public class ModConfig {
         /** Lines the details panel moves per wheel notch. */
         private static final int SCROLL_LINES = 3;
         private static final int BUTTON_HEIGHT = 20;
+        /** Below these the songpack list and details panel have nowhere to draw. */
+        private static final int MIN_LIST_WIDTH = 140;
+        private static final int MIN_DETAILS_WIDTH = 120;
+        private static final int MIN_CONTENT_HEIGHT = ROW_HEIGHT;
         private static final int LABEL_COLOR = 0xFFFFFFFF;
         private static final int MUTED_COLOR = 0xFFA0A0A0;
         private static final int ERROR_COLOR = 0xFFFF7777;
@@ -131,7 +135,9 @@ public class ModConfig {
             int end = Math.min(RMSongpackLoader.availableSongpacks.size(), start + perPage);
 
             int loadButtonX = listRight() - 78;
-            for (int i = start; i < end; i++) {
+            // When the window is too short the rows are not drawn, so their Load buttons
+            // must not exist either -- otherwise they sit invisible on top of the footer.
+            for (int i = start; hasRoomForContent() && i < end; i++) {
                 SongpackZip songpack = RMSongpackLoader.availableSongpacks.get(i);
                 int y = SONGPACK_START_Y + (i - start) * ROW_HEIGHT + 2;
                 boolean failed = songpack.blockLoading;
@@ -201,6 +207,13 @@ public class ModConfig {
             context.text(this.font, Component.literal("Music Delay Length"), controlLabelX, 47, LABEL_COLOR);
             context.text(this.font, Component.literal("Music Switch Speed"), controlLabelX, 73, LABEL_COLOR);
             context.text(this.font, Component.literal("Debug Mode Enabled"), controlLabelX, 99, LABEL_COLOR);
+            // On a short window there is no space between the controls above and the
+            // buttons below; drawing the list and panel anyway overlapped both.
+            if (!hasRoomForContent()) {
+                context.centeredText(this.font, Component.literal("Enlarge the window to manage songpacks"), centerX, 148, MUTED_COLOR);
+                return;
+            }
+
             context.text(this.font, Component.literal("Songpacks"), listLeft(), 144, LABEL_COLOR);
             context.text(this.font, Component.literal("Details"), detailsLeft(), 144, LABEL_COLOR);
             context.text(this.font, Component.literal(pageLabel()), centerX - this.font.width(pageLabel()) / 2, this.height - 44, MUTED_COLOR);
@@ -248,10 +261,12 @@ public class ModConfig {
             }
 
             if (lines.size() > visibleLines) {
-                // Report the visible line range rather than the scroll offset: the wheel
-                // moves SCROLL_LINES at a time, so an offset counter appears to skip
-                // numbers (1, 4, 7, ...) even though no text is ever skipped.
-                String scroll = "Lines " + (detailsScroll + 1) + "-" + end + " / " + lines.size();
+                // Count wheel steps, not line offsets: the panel moves SCROLL_LINES at a
+                // time, so numbering the offsets made the counter appear to skip (1, 4, 7).
+                int maxScroll = maxDetailsScroll(lines, visibleLines);
+                int pages = (maxScroll + SCROLL_LINES - 1) / SCROLL_LINES + 1;
+                int page = detailsScroll >= maxScroll ? pages : detailsScroll / SCROLL_LINES + 1;
+                String scroll = page + " / " + pages;
                 context.text(this.font, Component.literal(scroll), right - 8 - this.font.width(scroll), bottom - 12, MUTED_COLOR);
             }
         }
@@ -265,6 +280,9 @@ public class ModConfig {
         }
 
         private boolean scrollDetails(double mouseX, double mouseY, double amount) {
+            if (!hasRoomForContent()) {
+                return false;
+            }
             if (mouseX < detailsLeft() || mouseX > detailsRight() || mouseY < SONGPACK_START_Y - 4 || mouseY > detailsBottom()) {
                 return false;
             }
@@ -377,6 +395,9 @@ public class ModConfig {
         }
 
         private int rowIndexAt(double mouseX, double mouseY) {
+            if (!hasRoomForContent()) {
+                return -1;
+            }
             if (mouseX < listLeft() || mouseX > listRight() || mouseY < SONGPACK_START_Y) {
                 return -1;
             }
@@ -393,7 +414,17 @@ public class ModConfig {
         }
 
         private int listRight() {
-            return Math.max(330, this.width / 2 + 30);
+            // Split the width between the list and the details panel, but never let the
+            // details panel be squeezed to nothing on a narrow window -- it used to be
+            // pushed past detailsRight(), which drew its border and text over the list.
+            int preferred = Math.max(330, this.width / 2 + 30);
+            int capForDetails = detailsRight() - 18 - MIN_DETAILS_WIDTH;
+            return Math.max(listLeft() + MIN_LIST_WIDTH, Math.min(preferred, capForDetails));
+        }
+
+        /** False when the window is too short to fit the songpack list and details panel. */
+        private boolean hasRoomForContent() {
+            return detailsBottom() - (SONGPACK_START_Y - 4) >= MIN_CONTENT_HEIGHT;
         }
 
         private int detailsLeft() {
